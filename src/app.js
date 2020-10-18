@@ -37,6 +37,7 @@ app.use('/', (req, res, next) => {
 app.use((err, req, res, next) => {
   winston.info('Internal Server Error');
   res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
+  next(err);
 });
 
 process.on('uncaughtExceptionMonitor', (error, origin) => {
