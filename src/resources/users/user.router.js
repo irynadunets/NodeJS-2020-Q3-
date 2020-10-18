@@ -1,59 +1,70 @@
 const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
+const { notFound, ValidationError } = require('../../common/validationError');
 
 router
   .route('/')
-  .get(async (req, res) => {
+  .get(async (req, res, next) => {
     try {
       const users = await usersService.getAll();
       res.status(200).json(users.map(User.toResponse));
    } catch (e) {
-     res.status(401).send(e.message);
+     if (e instanceof ValidationError) {
+       res.status(e.status).send(e.text);
+     }
+     next(e);
   }
   })
-  .post(async (req, res) => {
+  .post(async (req, res, next) => {
     try {
       const user = await usersService.create(req.body);
       res.status(200).json(User.toResponse(user));
     } catch (e) {
-      res.status(400).send(e.message);
+      if (e instanceof ValidationError) {
+        res.status(e.status).send(e.text);
+      }
+      next(e);
     }
   });
 
 router
   .route('/:id')
-  .get(async (req, res) => {
+  .get(async (req, res, next) => {
     try {
       const user = await usersService.get(req.params.id);
     if (user) {
       res.status(200).json(User.toResponse(user));
     } else {
-      throw new Error(404, `User with id ${id} was not found`);
+      throw new ValidationError();
     }
    } catch (e) {
-    res.status(401).send(e.message);
+     res.status(notFound).send();
+     next(e);
   }
   })
-  .put(async (req, res) => {
+  .put(async (req, res, next) => {
     try {
       const user = await usersService.update(req.params.id, req.body);
       if (user) {
         res.status(200).json(User.toResponse(user));
       } else {
-        res.status(401).send(e.message);
+        throw new ValidationError();
       }
     } catch (e) {
-     res.status(400).send(e.message);
+      if (e instanceof ValidationError) {
+        res.status(e.status).send(e.text);
+      }
+      next(e);
    }
   })
-  .delete(async (req, res) => {
+  .delete(async (req, res, next) => {
      const user = await usersService.remove(req.params.id);
      if (user) {
       res.status(204).send();
     } else {
-      throw new Error(404, `User with id ${req.params.id} was not found`);  
-    }
+      res.status(notFound).send();
+    }    
   });
 
 module.exports = router;
