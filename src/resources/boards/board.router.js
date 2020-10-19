@@ -65,7 +65,7 @@ router
         res.status(204).send('The board has been deleted');
       } else {
         res.status(notFound).send();
-      }    
+      }
     });
 
   module.exports = router;

@@ -22,8 +22,8 @@ app.use(morgan('combined', { stream: winston.stream }));
 
 app.use((req, res, next) => {
   winston.info(JSON.stringify(req.query));
-  next()
-})
+  next();
+});
 
 app.use('/', (req, res, next) => {
   if (req.originalUrl === '/') {
@@ -34,21 +34,24 @@ app.use('/', (req, res, next) => {
   next();
 });
 
+//throw Error(INTERNAL_SERVER_ERROR);
+
 app.use((err, req, res, next) => {
   winston.info('Internal Server Error');
-  res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
-});
+  winston.error(`${err.status || INTERNAL_SERVER_ERROR} - ${err.message}`);
+  res.status(INTERNAL_SERVER_ERROR).send('server error, this will be resolved shortly!');
+})
 
 process.on('uncaughtExceptionMonitor', (error, origin) => {
   console.log(`captured error: ${error.message}`);
-  winston.info('IuncaughtException Error');
+  winston.info(`uncaughtException Error: captured error: ${error.message}`);
 });
 
 //throw Error('Oops!');
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', promise, `reason: ${reason.message}`);
-  winston.info('Unhandled Rejection');
+  winston.info(`Unhandled Rejection reason: ${reason.message}`);
 });
 
 //Promise.reject(Error('Oops!'));

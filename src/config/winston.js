@@ -31,7 +31,7 @@ var logger = winston.createLogger({
       winston.format.timestamp({
         format: timezoned,
       }),
-     winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)),
+     winston.format.printf((info) => `[${info.timestamp}] ${info.level} ${info.message}`)),
  exitOnError: false, // do not exit on handled exceptions
 });
 
