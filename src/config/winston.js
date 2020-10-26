@@ -9,13 +9,7 @@ var winston = require('winston');
      maxsize: 5242880, // 5MB
      maxFiles: 5,
      colorize: false,
-   },
-   console: {
-     level: 'debug',
-     handleExceptions: true,
-     json: false,
-     colorize: true,
-   },
+   }
   };
 
 const timezoned = () => new Date().toLocaleString("en-US", {timeZone: 'Europe/Kiev'})
@@ -31,7 +25,7 @@ var logger = winston.createLogger({
       winston.format.timestamp({
         format: timezoned,
       }),
-     winston.format.printf((info) => `[${info.timestamp}] ${info.level} ${info.message}`)),
+     winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)),
  exitOnError: false, // do not exit on handled exceptions
 });
 

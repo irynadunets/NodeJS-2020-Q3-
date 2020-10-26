@@ -1,7 +1,7 @@
 const User = require('./user.model');
 
-let users = [];
-users.push(new User(), new User(), new User());
+//let users = [];
+//users.push(new User(), new User(), new User());
 
 const getAll = async () => users;
 

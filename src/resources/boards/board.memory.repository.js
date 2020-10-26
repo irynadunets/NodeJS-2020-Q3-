@@ -1,7 +1,7 @@
 const Board = require('./board.model');
 
-let boards = [];
-boards.push(new Board(), new Board(), new Board());
+//let boards = [];
+//boards.push(new Board(), new Board(), new Board());
 
 const getAll = async () => boards;
 

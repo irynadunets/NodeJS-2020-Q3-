@@ -64,7 +64,7 @@ router
       res.status(204).send();
     } else {
       res.status(notFound).send();
-    }
+    }    
   });
 
 module.exports = router;

@@ -37,7 +37,7 @@ router
       if (task) {
         res.status(200).json(Task.toResponse(task));
       } else {
-        res.status(notFound).send();
+        throw new ValidationError();
       }
    } catch (e) {
      res.status(notFound).send();
@@ -66,6 +66,6 @@ router
       res.status(204).send('The task has been deleted');
     } else {
       res.status(notFound).send();
-    }
+    }    
   });
 module.exports = router;

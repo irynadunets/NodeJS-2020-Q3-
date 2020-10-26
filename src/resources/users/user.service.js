@@ -1,4 +1,4 @@
-const usersRepo = require('./user.memory.repository');
+const usersRepo = require('./user.db.repository');
 const tasksService = require('../tasks/task.service');
 
 const getAll = () => usersRepo.getAll();
@@ -9,7 +9,7 @@ const update = (id, user) => usersRepo.updateUser(id, user);
 const remove = async id => {
   const tasks = await tasksService.getAll();
   const updatedTasks = tasks.filter(el => el.userId === id)
-  .map(el => tasksService.update(null, el.id, { userId: null }));  
+  .map(el => tasksService.update(null, el.id, { userId: null }));
   return  Promise.all([
     updatedTasks,
     usersRepo.deleteUser(id)
