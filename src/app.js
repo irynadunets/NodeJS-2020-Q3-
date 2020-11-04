@@ -5,9 +5,10 @@ const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const taskRouter = require('./resources/tasks/task.router');
 const boardRouter = require('./resources/boards/board.router');
+const loginRouter = require('./resources/login/login.router');
+const authenticateJWT = require('./middleware/authenticateJWT');
 const morgan = require('morgan');
 const winston = require('./config/winston');
-var fs = require('fs');
 const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
 
 const app = express();
@@ -18,7 +19,10 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(morgan('combined', { stream: winston.stream }));
+morgan.token('body', req => JSON.stringify(req.body));
+morgan.token('query', req => JSON.stringify(req.query));
+app.use(morgan( ':method :status :url :query body :body size :res[content-length] - :response-time ms',
+{ stream: winston.stream } ) );
 
 app.use((req, res, next) => {
   winston.info(JSON.stringify(req.query));
@@ -56,9 +60,9 @@ process.on('unhandledRejection', (reason, promise) => {
 
 //Promise.reject(Error('Oops!'));
 
-app.use('/users', userRouter);
-app.use('/boards',boardRouter);
-app.use('/boards/:boardId/tasks', taskRouter);
+app.use('/login', loginRouter);
+app.use('/users', authenticateJWT, userRouter);
+app.use('/boards/:boardId/tasks', authenticateJWT, taskRouter);
+app.use('/boards',authenticateJWT, boardRouter);
 
 module.exports = app;
-

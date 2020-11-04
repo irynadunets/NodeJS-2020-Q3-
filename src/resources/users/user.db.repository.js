@@ -8,6 +8,10 @@ const getUser = async id => {
   return await User.findOne({ _id: id });
 }
 
+const findUserByLogin = async _login => {
+  return User.findOne({ login: _login });
+};
+
 const createUser = async user => {
   return User.create(user);
 };
@@ -20,4 +24,4 @@ const updateUser = async (userId, user) => {
 
 const deleteUser = async id => User.deleteOne({ _id: id });
 
-module.exports = { getAll, getUser, createUser, updateUser, deleteUser };
+module.exports = { getAll, getUser, findUserByLogin, createUser, updateUser, deleteUser };

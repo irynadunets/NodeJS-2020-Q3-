@@ -80,4 +80,4 @@ db.once('open', function() {
 });
 };
 
-module.exports = { users, tasks ,boards, connectToDB }
+module.exports = { connectToDB }

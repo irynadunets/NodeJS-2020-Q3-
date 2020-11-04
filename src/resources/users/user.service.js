@@ -1,11 +1,16 @@
 const usersRepo = require('./user.db.repository');
 const tasksService = require('../tasks/task.service');
+const { hashPassword } = require('../../common/hashHelper')
 
 const getAll = () => usersRepo.getAll();
 const get = id => usersRepo.getUser(id);
-const create = user => usersRepo.createUser(user);
+const findUserByLogin = login => usersRepo.findUserByLogin(login);
+const create = async user => {
+  const { password } = user;
+  const hashedPassword = await hashPassword(password);
+  return usersRepo.createUser({ ...user, password: hashedPassword });
+};
 const update = (id, user) => usersRepo.updateUser(id, user);
-
 const remove = async id => {
   const tasks = await tasksService.getAll();
   const updatedTasks = tasks.filter(el => el.userId === id)
@@ -16,4 +21,4 @@ const remove = async id => {
   ]);
 };
 
-module.exports = { getAll, get, create, update, remove };
+module.exports = { getAll, get, findUserByLogin, create, update, remove };

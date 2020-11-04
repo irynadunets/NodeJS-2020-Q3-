@@ -2,6 +2,7 @@ const router = require('express').Router({ mergeParams: true });
 const Task = require('./task.model');
 const tasksService = require('./task.service');
 const { notFound, ValidationError } = require('../../common/validationError');
+//const authenticateJWT = require('../../middleware/authenticateJWT');
 
 router
   .route('/')
@@ -66,6 +67,6 @@ router
       res.status(204).send('The task has been deleted');
     } else {
       res.status(notFound).send();
-    }    
+    }
   });
 module.exports = router;

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Board = require('./board.model');
 const boardsService = require('./board.service');
 const { notFound, ValidationError } = require('../../common/validationError');
+//const authenticateJWT = require('../../middleware/authenticateJWT');
 
 router
   .route('/')
@@ -65,7 +66,7 @@ router
         res.status(204).send('The board has been deleted');
       } else {
         res.status(notFound).send();
-      }    
+      }
     });
 
   module.exports = router;
