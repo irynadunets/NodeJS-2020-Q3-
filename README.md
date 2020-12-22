@@ -259,3 +259,4 @@ Add logging functionality to already existing REST service.
 6. Add a middleware which will proxy all the requests (except `/login`) and check that HTTP **Authorization** header has the correct value of **JWT** token.
 7. In case of the HTTP **Authorization** header in the request is absent or invalid or doesn’t follow `Bearer` scheme, the middleware should stop further router method execution and return HTTP **401** code (Unauthorized error) and the corresponding error message.
 8. **Add admin user to DB** on service start with login=admin and password=admin.
+![ CERT](https://app.rs.school/certificate/du1rcr1v)
